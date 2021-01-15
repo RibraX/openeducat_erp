@@ -39,14 +39,10 @@
         'views/attendance_register_view.xml',
         'views/attendance_sheet_view.xml',
         'views/attendance_line_view.xml',
+        'views/attendance_session_view.xml',
         'report/student_attendance_report.xml',
         'report/report_menu.xml',
         'menus/op_menu.xml'
-    ],
-    'test': [
-        'test/res_users_test.yml',
-        'test/attendance_sub_value_test.yml',
-        'test/attendance_process_test.yml'
     ],
     'demo': [
         'demo/attendance_register_demo.xml',

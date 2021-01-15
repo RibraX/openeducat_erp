@@ -26,6 +26,7 @@ from odoo.exceptions import ValidationError
 class OpStudentCourse(models.Model):
     _name = "op.student.course"
     _description = "Student Course Details"
+    _rec_name = 'student_id'
 
     student_id = fields.Many2one('op.student', 'Student', ondelete="cascade")
     course_id = fields.Many2one('op.course', 'Course', required=True)
@@ -52,8 +53,7 @@ class OpStudent(models.Model):
     _inherit = "mail.thread"
     _inherits = {"res.partner": "partner_id"}
 
-    first_name = fields.Char('First Name', size=128,
-                             translate=True)
+    first_name = fields.Char('First Name', size=128, translate=True)
     middle_name = fields.Char('Middle Name', size=128, translate=True)
     last_name = fields.Char('Last Name', size=128, translate=True)
     birth_date = fields.Date('Birth Date')
@@ -78,11 +78,13 @@ class OpStudent(models.Model):
     id_number = fields.Char('ID Card Number', size=64)
     partner_id = fields.Many2one('res.partner', 'Partner',
                                  required=True, ondelete="cascade")
+    user_id = fields.Many2one('res.users', 'User', ondelete="cascade")
     gr_no = fields.Char("GR Number", size=20)
     category_id = fields.Many2one('op.category', 'Category')
     course_detail_ids = fields.One2many('op.student.course', 'student_id',
                                         'Course Details',
                                         track_visibility='onchange')
+    active = fields.Boolean(default=True)
 
     _sql_constraints = [(
         'unique_gr_no',
@@ -94,11 +96,11 @@ class OpStudent(models.Model):
     def _onchange_name(self):
         if not self.middle_name:
             self.name = str(self.first_name) + \
-                        " " + str(self.last_name)
+                " " + str(self.last_name)
         else:
-            self.name = str(self.first_name) +\
-                    " " + str(self.middle_name) +\
-                    " " + str(self.last_name)
+            self.name = str(self.first_name) + \
+                " " + str(self.middle_name) + \
+                " " + str(self.last_name)
 
     @api.multi
     @api.constrains('birth_date')

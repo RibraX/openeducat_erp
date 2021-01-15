@@ -61,6 +61,15 @@ class OpFaculty(models.Model):
     faculty_subject_ids = fields.Many2many('op.subject', string='Subject(s)',
                                            track_visibility='onchange')
     emp_id = fields.Many2one('hr.employee', 'HR Employee')
+    main_department_id = fields.Many2one(
+        'op.department', 'Main Department',
+        default=lambda self:
+        self.env.user.dept_id and self.env.user.dept_id.id or False)
+    allowed_department_ids = fields.Many2many(
+        'op.department', string='Allowed Department',
+        default=lambda self:
+        self.env.user.department_ids and self.env.user.department_ids.ids or False)
+    active = fields.Boolean(default=True)
 
     @api.multi
     @api.constrains('birth_date')
@@ -74,11 +83,11 @@ class OpFaculty(models.Model):
     def _onchange_name(self):
         if not self.middle_name:
             self.name = str(self.first_name) + \
-                        " " + str(self.last_name)
+                " " + str(self.last_name)
         else:
             self.name = str(self.first_name) + \
-                        " " + str(self.middle_name) + \
-                        " " + str(self.last_name)
+                " " + str(self.middle_name) + \
+                " " + str(self.last_name)
 
     @api.multi
     def create_employee(self):
